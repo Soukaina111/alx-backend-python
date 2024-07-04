@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
 """
-Type annotations - Add two floats
+Add-Annotations
 """
-
 
 
 def add(a: float, b: float) -> float:
-"""
-Function to add two floating-point numbers.
-"""
-return a + b
+    """
+    add two floats-function
+    """
+    return a + b
