@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Checking_Type: Function by zooming 
+Checking_Type: Function by zooming
 """
 from typing import Union, Any, Mapping, Tuple, List
 
