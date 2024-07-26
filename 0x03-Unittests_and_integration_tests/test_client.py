@@ -7,11 +7,12 @@ from parameterized import parameterized, parameterized_class
 import unittest
 from unittest.mock import patch, PropertyMock
 
-
+# TestGithubOrgClient class to test the GithubOrgClient class
 class TestGithubOrgClient(unittest.TestCase):
     """Github Org Client test class
     """
 
+    # Parameterized test for the org method
     @parameterized.expand([
         ('google'),
         ('abc')
@@ -24,6 +25,7 @@ class TestGithubOrgClient(unittest.TestCase):
         test_class.org()
         mock.called_with_once(test_class.ORG_URL.format(org=org_name))
 
+    # Test for the _public_repos_url method
     def test_public_repos_url(self):
         """Test TestGithubOrgClient.public_repos_url
         return the correct value based on the given payload
@@ -36,6 +38,7 @@ class TestGithubOrgClient(unittest.TestCase):
             result = test_class._public_repos_url
             self.assertEqual(result, payload["repos_url"])
 
+    # Test for the public_repos method
     @patch('client.get_json')
     def test_public_repos(self, mock_json):
         """Test TestGithubOrgClient.test_public_repos
@@ -46,15 +49,16 @@ class TestGithubOrgClient(unittest.TestCase):
 
         with patch('client.GithubOrgClient._public_repos_url') as mock_public:
             mock_public.return_value = "hey there!"
-            test_class = GithubOrgClient('test')
-            result = test_class.public_repos()
+            test_ent = GithubOrgClient('test')
+            outcome = test_ent.public_repos()
 
             expected = [p["name"] for p in payloads]
-            self.assertEqual(result, expected)
+            self.assertEqual(outcome, expected)
 
             mock_json.called_with_once()
             mock_public.called_with_once()
 
+    # Parameterized test for the has_license method
     @parameterized.expand([
         ({"license": {"key": "my_license"}}, "my_license", True),
         ({"license": {"key": "other_license"}}, "my_license", False)
@@ -62,10 +66,10 @@ class TestGithubOrgClient(unittest.TestCase):
     def test_has_license(self, repo, license_key, expected):
         """Test TestGithubOrgClient.has_license
         """
-        result = GithubOrgClient.has_license(repo, license_key)
-        self.assertEqual(result, expected)
+        outcome = GithubOrgClient.has_license(repo, license_key)
+        self.assertEqual(outcome, expected)
 
-
+# Integration test for the GithubOrgClient class
 @parameterized_class(
     ("org_payload", "repos_payload", "expected_repos", "apache2_repos"),
     TEST_PAYLOAD
@@ -85,24 +89,26 @@ class TestIntegrationGithubOrgClient(unittest.TestCase):
         cls.get_patcher = patch('requests.get', **config)
         cls.mock = cls.get_patcher.start()
 
+    # Integration test for the public_repo method
     def test_public_repo(self):
         """Integration test: public_repo
         """
-        test_class = GithubOrgClient('Google')
+        test_ent = GithubOrgClient('Google')
 
-        self.assertEqual(test_class.org, self.org_payload)
-        self.assertEqual(test_class.repos_payload, self.repos_payload)
-        self.assertEqual(test_class.public_repos(), self.expected_repos)
-        self.assertEqual(test_class.public_repos("XLICENSE"), [])
+        self.assertEqual(test_ent.org, self.org_payload)
+        self.assertEqual(test_ent.repos_payload, self.repos_payload)
+        self.assertEqual(test_ent.public_repos(), self.expected_repos)
+        self.assertEqual(test_ent.public_repos("XLICENSE"), [])
         self.mock.assert_called()
 
+    # Integration test for the public_repos method with license
     def test_public_repos_with_license(self):
         """ Integration test for public repos with License """
-        test_class = GithubOrgClient("google")
+        test_ent = GithubOrgClient("google")
 
-        self.assertEqual(test_class.public_repos(), self.expected_repos)
-        self.assertEqual(test_class.public_repos("XLICENSE"), [])
-        self.assertEqual(test_class.public_repos(
+        self.assertEqual(test_ent.public_repos(), self.expected_repos)
+        self.assertEqual(test_ent.public_repos("XLICENSE"), [])
+        self.assertEqual(test_ent.public_repos(
             "apache-2.0"), self.apache2_repos)
         self.mock.assert_called()
 
