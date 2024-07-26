@@ -37,6 +37,7 @@ class TestAccessNestedMap(unittest.TestCase):
             access_nested_map(nested_map, path)
         self.assertEqual(f"KeyError('{expected}')", repr(err.exception))
 
+
 class TestGetJson(unittest.TestCase):
     """
     get_json Test Class
@@ -58,6 +59,7 @@ class TestGetJson(unittest.TestCase):
         self.assertEqual(get_json(test_url), test_payload)
         mock.assert_called_once()
         patcher.stop()
+
 
 class TestMemoize(unittest.TestCase):
     """
