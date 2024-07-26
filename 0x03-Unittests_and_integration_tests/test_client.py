@@ -8,6 +8,8 @@ import unittest
 from unittest.mock import patch, PropertyMock
 
 # TestGithubOrgClient class to test the GithubOrgClient class
+
+
 class TestGithubOrgClient(unittest.TestCase):
     """Github Org Client test class
     """
@@ -70,6 +72,8 @@ class TestGithubOrgClient(unittest.TestCase):
         self.assertEqual(result, expected)
 
 # Integration test for the GithubOrgClient class
+
+
 @parameterized_class(
     ("org_payload", "repos_payload", "expected_repos", "apache2_repos"),
     TEST_PAYLOAD
